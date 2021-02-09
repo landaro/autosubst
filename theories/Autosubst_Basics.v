@@ -225,7 +225,7 @@ Fixpoint take {X : Type} n (sigma : nat -> X) : list X :=
 Lemma id_comp {A B} (f : A -> B) : id >>> f = f. reflexivity. Qed.
 Lemma comp_id {A B} (f : A -> B) : f >>> id = f. reflexivity. Qed.
 Lemma compA {A B C D} (f : A -> B) (g : B -> C) (h : C -> D) :
-  (f >>> g) >>> h = f >>> (g >>> h).
+  f >>> (g >>> h) = (f >>> g) >>> h.
 Proof. reflexivity. Qed.
 
 Section LemmasForFun.
@@ -316,6 +316,14 @@ Lemma iterate_Sr {A} (f : A -> A) n a : iterate f (S n) a = iterate f n (f a).
 Proof.
   revert a; induction n. reflexivity. intros a.
   rewrite !iterate_S, <- IHn. reflexivity.
+Qed.
+
+Lemma iterate_iterate {A} (f : A -> A) i j x :
+  iterate f i (iterate f j x) = iterate f (i + j) x.
+Proof.
+  induction i; intros.
+  { now rewrite iterate_0. }
+  { now rewrite plusSn, iterate_S, IHi. }
 Qed.
 
 Lemma equal_f {X Y} {f g : X -> Y} a : f = g -> f a = g a.

@@ -22,7 +22,7 @@ Proof. f_ext. apply id_subst. Qed.
 
 Lemma id_scompR {A} sigma (f : _ -> A) :
   ids >>> (subst sigma >>> f) = sigma >>> f.
-Proof. now rewrite <- compA, id_scompX. Qed.
+Proof. now rewrite compA, id_scompX. Qed.
 
 Lemma subst_idX : subst ids = id.
 Proof. f_ext. exact subst_id. Qed.
@@ -38,6 +38,10 @@ Proof. f_ext. apply subst_comp. Qed.
 Lemma subst_compR {A} sigma tau (f : _ -> A) :
   subst sigma >>> (subst tau >>> f) = subst (sigma >>> subst tau) >>> f.
 Proof. now rewrite <- subst_compX. Qed.
+
+Lemma scompA f g h :
+  f >> (g >> h) = f >> g >> h.
+Proof. unfold scomp. now rewrite <- subst_compX, compA. Qed.
 
 Lemma fold_ren_cons (x : var) (xi : var -> var) :
   ids x .: ren xi = ren (x .: xi).
@@ -112,7 +116,7 @@ Proof. f_ext. apply id_hsubst. Qed.
 
 Lemma id_hsubstR {A} (f : _ -> A) (sigma : var -> inner) :
   ids >>> (hsubst sigma >>> f) = ids >>> f.
-Proof. now rewrite <- compA, id_hsubstX. Qed.
+Proof. now rewrite compA, id_hsubstX. Qed.
 
 Lemma hsubst_idX : hsubst ids = id.
 Proof. f_ext. exact hsubst_id. Qed.
@@ -140,7 +144,7 @@ Proof. f_ext. apply subst_hsubst_comp. Qed.
 Lemma scomp_hcompR {A} sigma theta (f : _ -> A) :
   subst sigma >>> (hsubst theta >>> f) =
   hsubst theta >>> (subst (sigma >>> hsubst theta) >>> f).
-Proof. now rewrite <- compA, scomp_hcompX. Qed.
+Proof. now rewrite compA, scomp_hcompX. Qed.
 
 End LemmasForHSubst.
 
